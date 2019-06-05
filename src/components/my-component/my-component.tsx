@@ -1,4 +1,4 @@
-import { Component, Element, h } from '@stencil/core';
+import { Component, Element, State, h } from '@stencil/core';
 
 @Component({
   tag: 'my-component',
@@ -7,6 +7,8 @@ import { Component, Element, h } from '@stencil/core';
 export class MyComponent {
 
   @Element() el: HTMLElement;
+
+  @State() indexLoaded: boolean = false;
 
   componentDidLoad() {
     this.getAndRenderIndex();
@@ -17,6 +19,7 @@ export class MyComponent {
 
     const templatePlaceholder = this.el.querySelector('.indexTemplate');
     templatePlaceholder.innerHTML = result;
+    this.indexLoaded = true;
   }
 
   async getFile() {
@@ -28,7 +31,26 @@ export class MyComponent {
     return (
       <div>
         This is the example main component
-      <div class="indexTemplate"></div>
+
+        {/* 
+          Uncommenting this block leads to a not working display of
+          the content of the .indexTemplate div
+        */}
+
+        {/* {!this.indexLoaded && (
+          <div class="indexLoading">
+            Loading...
+          </div>
+        )} */}
+        <div class="indexTemplate"></div>
+        {/* 
+          It works when used after the .indexTemplate
+        */}
+        {!this.indexLoaded && (
+          <div class="indexLoading">
+            Loading...
+           </div>
+        )}
       </div>
     );
   }
